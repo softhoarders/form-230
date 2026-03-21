@@ -10,6 +10,36 @@
     --donate-bg: linear-gradient(135deg, #1f6f30 0%, #154c21 100%);
     --donate-btn: #3fb950;
     --donate-btn-hover: #2ea043;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Glassmorphism Card */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--glass-shadow);
+    transition: all 0.3s ease;
+}
+
+.light-mode .glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.glass-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.light-mode .glass-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .light-mode {
@@ -66,12 +96,32 @@ header {
 }
 
 #theme-toggle {
-    background: none;
-    border: 1px solid var(--border);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
     color: var(--text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--glass-shadow);
+    font-weight: 500;
+}
+
+.light-mode #theme-toggle {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.light-mode #theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
 }
 
 .container {
@@ -316,9 +366,9 @@ input:focus {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgba(125, 125, 125, 0.1);
+    background: var(--glass-bg);
     backdrop-filter: blur(10px);
-    border: 1px solid var(--border);
+    border: 1px solid var(--glass-border);
     color: var(--text-color);
     padding: 6px 12px;
     border-radius: 20px;
@@ -326,33 +376,36 @@ input:focus {
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--glass-shadow);
 }
 
 .light-mode .framer-lang-btn {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .framer-lang-btn:hover {
-    background: rgba(125, 125, 125, 0.2);
+    background: rgba(255, 255, 255, 0.1);
     transform: translateY(-1px);
 }
 
 .light-mode .framer-lang-btn:hover {
-    background: rgba(255, 255, 255, 1);
+    background: rgba(255, 255, 255, 0.25);
 }
 
 .framer-lang-dropdown {
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
     border-radius: 12px;
     min-width: 140px;
     padding: 6px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--glass-shadow);
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
@@ -381,10 +434,11 @@ input:focus {
     border-radius: 8px;
     font-size: 0.9rem;
     transition: background 0.2s;
+    background: transparent;
 }
 
 .framer-lang-option:hover {
-    background: rgba(125, 125, 125, 0.1);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .light-mode .framer-lang-option:hover {

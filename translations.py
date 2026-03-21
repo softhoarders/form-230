@@ -1,7 +1,7 @@
 TRANSLATIONS = {
     'ro': {
-        'page_title': 'Support the team / Sustine echipa Soft Hoarders',
-        'header_title': 'Sustine echipa Soft Hoarders',
+        'page_title': 'Sustine Echipa Soft Hoarders',
+        'header_title': 'Sustine Echipa Soft Hoarders',
         'theme_toggle': '🌓 Schimba Tema',
         'donate_msg': 'Cauți să faci o donație simplă, unică sau lunară, pentru a ne susține activitatea?',
         'donate_btn': 'Donează Direct prin Hack Club',
@@ -33,8 +33,8 @@ TRANSLATIONS = {
         'login': 'Logare'
     },
     'en': {
-        'page_title': 'Support the team / Sustine echipa Soft Hoarders',
-        'header_title': 'Support the team Soft Hoarders',
+        'page_title': 'Support Team Soft Hoarders',
+        'header_title': 'Support Team Soft Hoarders',
         'theme_toggle': '🌓 Toggle Theme',
         'donate_msg': 'Looking for a simple, one-time or monthly donation to support our team?',
         'donate_btn': 'Donate Directly via Hack Club',
