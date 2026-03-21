@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Formularul 230{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body class="light-mode">
+    <header>
+        <div class="logo">Redirecționează 3.5%</div>
+        <button id="theme-toggle">🌓 Schimbă Tema</button>
+    </header>
+    <main>
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

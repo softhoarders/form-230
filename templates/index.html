@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="donation-banner intro-fade">
+    <strong>Looking for a simple, one-time or monthly donation to support our work?</strong><br>
+    <a href="https://hcb.hackclub.com/donations/start/soft-hoarders" target="_blank" class="btn btn-donate mt-1">Donate Directly via Hack Club</a>
+</div>
+
+<div class="form-container intro-fade">
+    <h1 class="text-center mb-2">Completare Formular 230</h1>
+    <p class="text-center text-muted">Redirecționează până la 3.5% din impozitul pe venit către ONG-ul nostru. Durează doar 2 minute.</p>
+    
+    <form method="POST" action="/" class="animated-form" id="form230">
+        <fieldset>
+            <legend>1. Date de identificare a contribuabilului</legend>
+            <div class="row">
+                <div class="form-group col-2">
+                    <label for="nume">Nume *</label>
+                    <input type="text" id="nume" name="nume" required placeholder="Popescu">
+                </div>
+                <div class="form-group col-2">
+                    <label for="prenume">Prenume *</label>
+                    <input type="text" id="prenume" name="prenume" required placeholder="Ion">
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="form-group col-3">
+                    <label for="initiala_tatalui">Inițiala Tatălui *</label>
+                    <input type="text" id="initiala_tatalui" name="initiala_tatalui" required placeholder="V">
+                </div>
+                <div class="form-group col-3 span-2">
+                    <label for="cnp">CNP *</label>
+                    <input type="text" id="cnp" name="cnp" required maxlength="13" pattern="\d{13}" placeholder="1xxxxxxxxxxxx">
+                </div>
+            </div>
+
+            <legend class="mt-2">Adresă / Domiciliu</legend>
+            <div class="row">
+                <div class="form-group col-2">
+                    <label for="judet">Județ / Sector *</label>
+                    <input type="text" id="judet" name="judet" required>
+                </div>
+                <div class="form-group col-2">
+                    <label for="localitate">Localitate *</label>
+                    <input type="text" id="localitate" name="localitate" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-full">
+                    <label for="strada">Strada</label>
+                    <input type="text" id="strada" name="strada">
+                </div>
+            </div>
+
+            <div class="row mb-1">
+                <div class="form-group">
+                    <label for="numar">Număr</label>
+                    <input type="text" id="numar" name="numar">
+                </div>
+                <div class="form-group">
+                    <label for="bloc">Bloc</label>
+                    <input type="text" id="bloc" name="bloc">
+                </div>
+                <div class="form-group">
+                    <label for="scara">Scara</label>
+                    <input type="text" id="scara" name="scara">
+                </div>
+                <div class="form-group">
+                    <label for="apartament">Apartament</label>
+                    <input type="text" id="apartament" name="apartament">
+                </div>
+                <div class="form-group">
+                    <label for="cod_postal">Cod Postal</label>
+                    <input type="text" id="cod_postal" name="cod_postal">
+                </div>
+            </div>
+            
+            <legend class="mt-2">Contact</legend>
+            <div class="row">
+                <div class="form-group col-2">
+                    <label for="telefon">Telefon</label>
+                    <input type="tel" id="telefon" name="telefon" placeholder="07xxxxxxxx">
+                </div>
+                <div class="form-group col-2">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="nume@exemplu.ro">
+                </div>
+            </div>
+        </fieldset>
+        
+        <div class="form-footer">
+            <div class="cf-turnstile mt-2" data-sitekey="1x00000000000000000000AA"></div>
+            <button type="submit" class="btn btn-primary mt-2">Trimite Formularul</button>
+            <p class="terms mt-1">Trimițând formularul, ești de acord cu termenii noștri. Generarea se face automat la aprobare.</p>
+        </div>
+    </form>
+</div>
+{% endblock %}
