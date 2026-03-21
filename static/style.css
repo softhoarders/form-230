@@ -42,6 +42,56 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Contact Section Styles */
+.contact-grid {
+    display: grid;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.contact-item {
+    text-align: center;
+}
+
+.contact-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+    color: var(--primary-color);
+}
+
+.contact-info {
+    color: var(--text-color);
+    margin: 1rem 0;
+    line-height: 1.5;
+}
+
+.email-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.email-link {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.email-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.light-mode .email-link {
+    color: var(--text-color);
+}
+
+.light-mode .email-link:hover {
+    color: var(--primary-hover);
+}
+
 .light-mode {
     --bg-color: #f6f8fa;
     --text-color: #24292f;
@@ -62,6 +112,13 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color 0.4s ease, color 0.4s ease;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+}
+
+.light-mode body {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
 }
 
 /* Light to Dark Mode cover thing */
@@ -131,10 +188,19 @@ header {
 }
 
 .form-container {
-    background-color: var(--card-bg);
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
     padding: 2rem;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
+    box-shadow: var(--glass-shadow);
+}
+
+.light-mode .form-container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .intro-fade {
@@ -179,6 +245,18 @@ header {
 }
 .light-mode .btn-donate:hover {
     color: #ffffff !important;
+}
+
+.tax-deductible-note {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 0.5rem;
+    display: block;
+    font-style: italic;
+}
+
+.light-mode .tax-deductible-note {
+    opacity: 0.7;
 }
 
 @keyframes fadeIn {

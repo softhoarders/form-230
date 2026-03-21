@@ -12,19 +12,19 @@
         <div class="logo">{{ t.header_title }}</div>
         <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
             <div class="framer-lang-switcher">
-                <button class="framer-lang-btn" aria-haspopup="true" aria-expanded="false">
-                    {% if lang == 'en' %}<span class="flag-icon">🇺🇸</span> EN{% else %}<span class="flag-icon">🇷🇴</span> RO{% endif %}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
-                </button>
-                <div class="framer-lang-dropdown">
-                    <a href="{{ url_for('set_lang_route', lang_code='en') }}" class="framer-lang-option {% if lang == 'en' %}active{% endif %}">
-                        <span class="flag-icon">🇺🇸</span> English
-                    </a>
-                    <a href="{{ url_for('set_lang_route', lang_code='ro') }}" class="framer-lang-option {% if lang == 'ro' %}active{% endif %}">
-                        <span class="flag-icon">🇷🇴</span> Română
-                    </a>
-                </div>
-            </div>
+    <button class="framer-lang-btn" aria-haspopup="true" aria-expanded="false">
+        {% if lang == 'en' %}<span class="flag-icon">🇺🇸</span>{% else %}<span class="flag-icon">🇷🇴</span>{% endif %}
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div class="framer-lang-dropdown">
+        <a href="{{ url_for('set_lang_route', lang_code='en') }}" class="framer-lang-option {% if lang == 'en' %}active{% endif %}">
+            <span class="flag-icon">🇺🇸</span>
+        </a>
+        <a href="{{ url_for('set_lang_route', lang_code='ro') }}" class="framer-lang-option {% if lang == 'ro' %}active{% endif %}">
+            <span class="flag-icon">🇷🇴</span>
+        </a>
+    </div>
+</div>
             <button id="theme-toggle">{{ t.theme_toggle }}</button>
             <a href="{{ url_for('login') }}" class="btn" style="padding: 5px 10px; font-size: 0.9em; text-decoration: none;">{{ t.login }}</a>
         </div>

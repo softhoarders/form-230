@@ -3,6 +3,7 @@
 {% block content %}
 <div class="donation-banner intro-fade">
     <strong>{{ t.donate_msg }}</strong><br>
+    <p class="tax-deductible-note">Your donation is 100% tax deductible for people in the US</p>
     <a href="https://hcb.hackclub.com/donations/start/soft-hoarders" target="_blank" class="btn btn-donate mt-1">{{ t.donate_btn }}</a>
 </div>
 
@@ -102,20 +103,20 @@
 <!-- Contact Section -->
 <div class="contact-section intro-fade mt-3">
     <h2 class="text-center mb-2">{{ t.contact_us }}</h2>
-    <div class="row" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
-        <div class="contact-card glass-card" style="flex: 1; min-width: 250px; text-align: center;">
-            <div style="font-size: 2rem; color: var(--primary-color);">📍</div>
+    <div class="contact-grid">
+        <div class="contact-item glass-card">
+            <div class="contact-icon">📍</div>
             <h3>{{ t.location_title }}</h3>
-            <p style="color: var(--text-color);">Bulevardul Știrbei Vodă 52<br>00352 Craiova, Romania</p>
+            <p class="contact-info">Bulevardul Știrbei Vodă 52<br>00352 Craiova, Romania</p>
         </div>
-        <div class="contact-card glass-card" style="flex: 1; min-width: 250px; text-align: center;">
-            <div style="font-size: 2rem; color: var(--primary-color);">✉️</div>
+        <div class="contact-item glass-card">
+            <div class="contact-icon">✉️</div>
             <h3>{{ t.email_title }}</h3>
-            <p>
-                <a href="mailto:team@soft-hoarders.com" style="color: var(--primary-color); text-decoration: none;">team@soft-hoarders.com</a><br>
-                <a href="mailto:team@softhoarders.me" style="color: var(--text-color); text-decoration: none;">team@softhoarders.me</a><br>
-                <a href="mailto:s.hoarders@gmail.com" style="color: var(--text-color); text-decoration: none;">s.hoarders@gmail.com</a>
-            </p>
+            <div class="email-list">
+                <a href="mailto:team@soft-hoarders.com" class="email-link">team@soft-hoarders.com</a>
+                <a href="mailto:team@softhoarders.me" class="email-link">team@softhoarders.me</a>
+                <a href="mailto:s.hoarders@gmail.com" class="email-link">s.hoarders@gmail.com</a>
+            </div>
         </div>
     </div>
 </div>
