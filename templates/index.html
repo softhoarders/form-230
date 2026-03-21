@@ -2,99 +2,121 @@
 
 {% block content %}
 <div class="donation-banner intro-fade">
-    <strong>Looking for a simple, one-time or monthly donation to support our work?</strong><br>
-    <a href="https://hcb.hackclub.com/donations/start/soft-hoarders" target="_blank" class="btn btn-donate mt-1">Donate Directly via Hack Club</a>
+    <strong>{{ t.donate_msg }}</strong><br>
+    <a href="https://hcb.hackclub.com/donations/start/soft-hoarders" target="_blank" class="btn btn-donate mt-1">{{ t.donate_btn }}</a>
 </div>
 
 <div class="form-container intro-fade">
-    <h1 class="text-center mb-2">Completare Formular 230</h1>
-    <p class="text-center text-muted">Redirecționează până la 3.5% din impozitul pe venit către ONG-ul nostru. Durează doar 2 minute.</p>
+    <h1 class="text-center mb-2">{{ t.form_title }}</h1>
+    <p class="text-center text-muted">{{ t.form_subtitle }}</p>
     
     <form method="POST" action="/" class="animated-form" id="form230">
         <fieldset>
-            <legend>1. Date de identificare a contribuabilului</legend>
+            <legend>{{ t.step1 }}</legend>
             <div class="row">
                 <div class="form-group col-2">
-                    <label for="nume">Nume *</label>
-                    <input type="text" id="nume" name="nume" required placeholder="Popescu">
+                    <label for="nume">{{ t.nume }}</label>
+                    <input type="text" id="nume" name="nume" required>
                 </div>
                 <div class="form-group col-2">
-                    <label for="prenume">Prenume *</label>
-                    <input type="text" id="prenume" name="prenume" required placeholder="Ion">
+                    <label for="prenume">{{ t.prenume }}</label>
+                    <input type="text" id="prenume" name="prenume" required>
                 </div>
             </div>
             
             <div class="row">
                 <div class="form-group col-3">
-                    <label for="initiala_tatalui">Inițiala Tatălui *</label>
-                    <input type="text" id="initiala_tatalui" name="initiala_tatalui" required placeholder="V">
+                    <label for="initiala_tatalui">{{ t.initiala }}</label>
+                    <input type="text" id="initiala_tatalui" name="initiala_tatalui" required maxlength="1">
                 </div>
                 <div class="form-group col-3 span-2">
-                    <label for="cnp">CNP *</label>
-                    <input type="text" id="cnp" name="cnp" required maxlength="13" pattern="\d{13}" placeholder="1xxxxxxxxxxxx">
+                    <label for="cnp">{{ t.cnp }}</label>
+                    <input type="text" id="cnp" name="cnp" required maxlength="13" pattern="\d{13}">
                 </div>
             </div>
 
-            <legend class="mt-2">Adresă / Domiciliu</legend>
+            <legend class="mt-2">{{ t.address_title }}</legend>
             <div class="row">
                 <div class="form-group col-2">
-                    <label for="judet">Județ / Sector *</label>
+                    <label for="judet">{{ t.county }}</label>
                     <input type="text" id="judet" name="judet" required>
                 </div>
                 <div class="form-group col-2">
-                    <label for="localitate">Localitate *</label>
+                    <label for="localitate">{{ t.city }}</label>
                     <input type="text" id="localitate" name="localitate" required>
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-full">
-                    <label for="strada">Strada</label>
-                    <input type="text" id="strada" name="strada">
+                    <label for="strada">{{ t.street }}</label>
+                    <input type="text" id="strada" name="strada" required>
                 </div>
             </div>
 
             <div class="row mb-1">
                 <div class="form-group">
-                    <label for="numar">Număr</label>
+                    <label for="numar">{{ t.number }}</label>
                     <input type="text" id="numar" name="numar">
                 </div>
                 <div class="form-group">
-                    <label for="bloc">Bloc</label>
+                    <label for="bloc">{{ t.block }}</label>
                     <input type="text" id="bloc" name="bloc">
                 </div>
                 <div class="form-group">
-                    <label for="scara">Scara</label>
+                    <label for="scara">{{ t.stair }}</label>
                     <input type="text" id="scara" name="scara">
                 </div>
                 <div class="form-group">
-                    <label for="apartament">Apartament</label>
+                    <label for="apartament">{{ t.apt }}</label>
                     <input type="text" id="apartament" name="apartament">
                 </div>
                 <div class="form-group">
-                    <label for="cod_postal">Cod Postal</label>
+                    <label for="cod_postal">{{ t.zip }}</label>
                     <input type="text" id="cod_postal" name="cod_postal">
                 </div>
             </div>
-            
-            <legend class="mt-2">Contact</legend>
+
+            <legend class="mt-2">{{ t.contact_title }}</legend>
+            <p class="text-muted" style="margin-top: 0; font-size: 0.85rem;">{{ t.contact_desc }}</p>
             <div class="row">
                 <div class="form-group col-2">
-                    <label for="telefon">Telefon</label>
-                    <input type="tel" id="telefon" name="telefon" placeholder="07xxxxxxxx">
+                    <label for="telefon">{{ t.phone }}</label>
+                    <input type="tel" id="telefon" name="telefon">
                 </div>
                 <div class="form-group col-2">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" placeholder="nume@exemplu.ro">
+                    <label for="email">{{ t.email }}</label>
+                    <input type="email" id="email" name="email">
                 </div>
             </div>
         </fieldset>
         
         <div class="form-footer">
             <div class="cf-turnstile mt-2" data-sitekey="1x00000000000000000000AA"></div>
-            <button type="submit" class="btn btn-primary mt-2">Trimite Formularul</button>
-            <p class="terms mt-1">Trimițând formularul, ești de acord cu termenii noștri. Generarea se face automat la aprobare.</p>
+            <button type="submit" class="btn btn-primary mt-2">{{ t.submit_btn }}</button>
+            <p class="terms mt-1">{{ t.terms }}</p>
         </div>
     </form>
+</div>
+
+<!-- Contact Section -->
+<div class="contact-section intro-fade mt-3" style="background: var(--card-bg); padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px var(--shadow-color);">
+    <h2 class="text-center mb-2">{{ t.contact_us }}</h2>
+    <div class="row" style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+        <div class="contact-card" style="flex: 1; min-width: 250px; text-align: center;">
+            <div style="font-size: 2rem; color: var(--primary-color);">📍</div>
+            <h3>{{ t.location_title }}</h3>
+            <p style="color: var(--text-color);">Bulevardul Știrbei Vodă 52<br>00352 Craiova, Romania</p>
+        </div>
+        <div class="contact-card" style="flex: 1; min-width: 250px; text-align: center;">
+            <div style="font-size: 2rem; color: var(--primary-color);">✉️</div>
+            <h3>{{ t.email_title }}</h3>
+            <p>
+                <a href="mailto:team@soft-hoarders.com" style="color: var(--primary-color); text-decoration: none;">team@soft-hoarders.com</a><br>
+                <a href="mailto:team@softhoarders.me" style="color: var(--text-color); text-decoration: none;">team@softhoarders.me</a><br>
+                <a href="mailto:s.hoarders@gmail.com" style="color: var(--text-color); text-decoration: none;">s.hoarders@gmail.com</a>
+            </p>
+        </div>
+    </div>
 </div>
 {% endblock %}

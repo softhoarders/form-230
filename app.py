@@ -8,6 +8,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from PyPDF2 import PdfReader, PdfWriter
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
+from translations import TRANSLATIONS
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_key_change_in_production'
@@ -30,8 +31,8 @@ class Submission(db.Model):
     prenume = db.Column(db.String(100), nullable=False)
     initiala_tatalui = db.Column(db.String(10), nullable=False)
     cnp = db.Column(db.String(20), nullable=False)
-    judet = db.Column(db.String(50), nullable=False)
-    localitate = db.Column(db.String(100), nullable=False)
+    judet = db.Column(db.String(50), nullable=True) # Optional now
+    localitate = db.Column(db.String(100), nullable=True) # Optional now
     strada = db.Column(db.String(150), nullable=True)
     numar = db.Column(db.String(20), nullable=True)
     bloc = db.Column(db.String(20), nullable=True)
@@ -49,6 +50,10 @@ class AdminConfig(db.Model):
     ong_name = db.Column(db.String(150), default='Asociatia My NGO')
     ong_cui = db.Column(db.String(50), default='RO12345678')
     ong_iban = db.Column(db.String(50), default='RO00BANK0000000000000000')
+    ong_sediu = db.Column(db.String(150), default='Bucuresti, Sector 1, Str. Exemplu')
+    ong_cont_bancar = db.Column(db.String(150), default='Banca Transilvania')
+    signature_base64 = db.Column(db.Text, nullable=True) # allow storing signature data
+
 
 with app.app_context():
     db.create_all()
@@ -75,17 +80,66 @@ def generate_pdf(submission):
     
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=A4)
-    # Overlay text at specific coordinates. These coordinates need adjustment based on the actual PDF structure
-    # This is a generic placement
-    can.drawString(100, 700, f"{submission.nume} {submission.prenume}")
-    can.drawString(100, 680, submission.cnp)
-    can.drawString(100, 660, f"{submission.strada} nr {submission.numar}, bl {submission.bloc}, ap {submission.apartament}")
-    can.drawString(100, 640, f"{submission.localitate}, {submission.judet}")
+    # Aceste coordonate sunt aproximative pentru un Formular 230 ANAF standard.
+    # Necesita ajustari usoare de cativa pixeli in functie de marginea la imprimare.
+    can.setFont("Helvetica-Bold", 10)
     
+    # I. Date de identificare a contribuabilului
+    can.drawString(65, 669, submission.nume.upper())
+    can.drawString(295, 669, submission.initiala_tatalui.upper())
+    can.drawString(65, 647, submission.prenume.upper())
+    
+    # CNP spaced out to fit exactly inside the 13 small boxes (+18.48 pitch)
+    cnp_x = 352
+    for char in submission.cnp:
+        can.drawString(cnp_x, 660, char)
+        cnp_x += 18.48
+    
+    # Adresa (Opțional)
+    if submission.strada: can.drawString(65, 625, f"{submission.strada}")
+    if submission.numar: can.drawString(288, 625, f"{submission.numar}")
+    if submission.bloc: can.drawString(48, 603, f"{submission.bloc}")
+    if submission.scara: can.drawString(108, 603, f"{submission.scara}")
+    if submission.apartament: can.drawString(186, 603, f"{submission.apartament}")
+    
+    if submission.judet: can.drawString(255, 603, submission.judet.upper())
+    if submission.localitate: can.drawString(65, 581, submission.localitate.upper())
+    if submission.cod_postal: can.drawString(265, 581, f"{submission.cod_postal}")
+    
+    can.drawString(363, 597, f"{submission.telefon or ''}")
+    can.drawString(363, 637, f"{submission.email or ''}")
+    
+    # II. Destinația sumei reprezentând până la 3.5% (Bifa)
+    can.setFont("Helvetica-Bold", 12)
+    can.drawString(219, 436, "X")
+
+    can.setFont("Helvetica-Bold", 10)
     # NGO details
-    can.drawString(100, 500, config.ong_name)
-    can.drawString(100, 480, config.ong_cui)
-    can.drawString(100, 460, config.ong_iban)
+    can.drawString(178, 374, config.ong_name.upper() if config.ong_name else '')
+    can.drawString(102, 365, config.ong_cui if config.ong_cui else '')
+    can.drawString(102, 351, config.ong_iban if config.ong_iban else '')
+
+    # Admin Signature (Semnătura împuternicitului) - aligned towards bottom right
+    if config.signature_base64:
+        import base64
+        import tempfile
+        try:
+            head, b64data = config.signature_base64.split(',', 1)
+            sig_data = base64.b64decode(b64data)
+            with tempfile.NamedFileMode('w+b', delete=False, suffix='.png') as tmp:
+                tmp.write(sig_data)
+                tmp.flush()
+                can.drawImage(tmp.name, 400, 50, width=120, height=45, mask='auto')
+                import os
+                os.remove(tmp.name)
+        except Exception as e:
+            print("Error drawing signature:", e)
+    
+    # Date today near signature
+    import datetime
+    can.setFont("Helvetica", 10)
+    can.drawString(460, 42, datetime.datetime.now().strftime("%d.%m.%Y"))
+
     can.save()
     packet.seek(0)
     
@@ -105,6 +159,36 @@ def generate_pdf(submission):
     return filepath
 
 # Routes
+
+@app.before_request
+def set_language():
+    if 'lang' not in session and not request.path.startswith('/static'):
+        session['lang'] = 'en'
+        ip = request.headers.get('CF-Connecting-IP') or request.headers.get('X-Forwarded-For', request.remote_addr)
+        if ip:
+            ip = ip.split(',')[0].strip()
+            if ip in ['127.0.0.1', '::1']:
+                session['lang'] = 'ro'
+            else:
+                try:
+                    r = requests.get(f"http://ip-api.com/json/{ip}", timeout=2).json()
+                    if r.get('countryCode') == 'RO':
+                        session['lang'] = 'ro'
+                except:
+                    pass
+
+@app.context_processor
+def inject_translations():
+    lang = session.get('lang', 'ro')
+    t = TRANSLATIONS.get(lang, TRANSLATIONS['ro'])
+    return dict(t=t, lang=lang)
+
+@app.route('/lang/<lang_code>')
+def set_lang_route(lang_code):
+    if lang_code in TRANSLATIONS:
+        session['lang'] = lang_code
+    return redirect(request.referrer or url_for('index'))
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -174,6 +258,19 @@ def update_config():
     config.ong_name = request.form.get('ong_name')
     config.ong_cui = request.form.get('ong_cui')
     config.ong_iban = request.form.get('ong_iban')
+    config.ong_sediu = request.form.get('ong_sediu')
+    config.ong_cont_bancar = request.form.get('ong_cont_bancar')
+    
+    # Handle signature file
+    sig_file = request.files.get('signature_file')
+    if sig_file and sig_file.filename != '':
+        import base64
+        import mimetypes
+        mimetype = mimetypes.guess_type(sig_file.filename)[0] or 'image/png'
+        # Read file, convert to base64
+        b64_encoded = base64.b64encode(sig_file.read()).decode('utf-8')
+        config.signature_base64 = f"data:{mimetype};base64,{b64_encoded}"
+
     db.session.commit()
     flash('Configurația a fost actualizată.', 'success')
     return redirect(url_for('admin'))
