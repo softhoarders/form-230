@@ -4,9 +4,8 @@ import datetime
 import requests
 import base64
 import tempfile
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import check_password_hash, generate_password_hash
 from PyPDF2 import PdfReader, PdfWriter
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
@@ -112,10 +111,12 @@ def generate_pdf(submission):
     can = canvas.Canvas(packet, pagesize=A4)
     can.setFont("Helvetica-Bold", 10)
 
+    can.setFillColorRGB(0, 0, 0) # Ensure text is explicitly black
+    
     # I. Date de identificare a contribuabilului
-    can.drawString(85, 669, clean_text(submission.nume).upper())
-    can.drawString(295, 669, clean_text(submission.initiala_tatalui).upper())
-    can.drawString(85, 647, clean_text(submission.prenume).upper())
+    can.drawString(55, 673, clean_text(submission.nume).upper())
+    can.drawString(292, 673, clean_text(submission.initiala_tatalui).upper())
+    can.drawString(65, 648, clean_text(submission.prenume).upper())
 
     # CNP spaced out to fit exactly inside the 13 small boxes (+18.48 pitch)
     cnp_x = 333.5
@@ -124,18 +125,18 @@ def generate_pdf(submission):
         cnp_x += 18.48
 
     # Adresa (Opțional)
-    if submission.strada: can.drawString(80, 625, clean_text(submission.strada))
-    if submission.numar: can.drawString(310, 625, clean_text(submission.numar))
-    if submission.bloc: can.drawString(60, 603, clean_text(submission.bloc))
-    if submission.scara: can.drawString(120, 603, clean_text(submission.scara))
-    if submission.apartament: can.drawString(175, 603, clean_text(submission.apartament))
+    if submission.strada: can.drawString(55, 625, clean_text(submission.strada))
+    if submission.numar: can.drawString(286, 625, clean_text(submission.numar))
+    if submission.bloc: can.drawString(48, 603, clean_text(submission.bloc))
+    if submission.scara: can.drawString(106, 603, clean_text(submission.scara))
+    if submission.apartament: can.drawString(188, 603, clean_text(submission.apartament))
+    if submission.judet: can.drawString(256, 603, clean_text(submission.judet).upper())
 
-    if submission.judet: can.drawString(240, 603, clean_text(submission.judet).upper())
-    if submission.localitate: can.drawString(100, 581, clean_text(submission.localitate).upper())
-    if submission.cod_postal: can.drawString(300, 581, clean_text(submission.cod_postal))
-
-    can.drawString(115, 559, f"{clean_text(submission.telefon) or ''}")
-    can.drawString(245, 559, f"{clean_text(submission.email) or ''}")
+    if submission.localitate: can.drawString(66, 581, clean_text(submission.localitate).upper())
+    if submission.cod_postal: can.drawString(262, 581, clean_text(submission.cod_postal))
+    
+    can.drawString(361, 610, f"{clean_text(submission.telefon) or ''}")
+    can.drawString(361, 637, f"{clean_text(submission.email) or ''}")
 
     can.setFont("Helvetica-Bold", 10)
     # NGO details
