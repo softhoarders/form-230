@@ -81,7 +81,9 @@ def clean_text(text):
         'â': 'a', 'Â': 'A',
         'î': 'i', 'Î': 'I',
         'ș': 's', 'Ș': 'S',
-        'ț': 't', 'Ț': 'T'
+        'ț': 't', 'Ț': 'T',
+        'ş': 's', 'Ş': 'S',
+        'ţ': 't', 'Ţ': 'T'
     }
     for search, replace in diacritics.items():
         text = text.replace(search, replace)
