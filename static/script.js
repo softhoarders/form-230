@@ -42,4 +42,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // GDPR consent handling
+    const gdprCheckbox = document.getElementById('gdpr-consent');
+    const donateBtn = document.getElementById('donate-btn');
+    
+    if (gdprCheckbox && donateBtn) {
+        gdprCheckbox.addEventListener('change', function() {
+            donateBtn.disabled = !this.checked;
+            if (this.checked) {
+                donateBtn.classList.add('active');
+            } else {
+                donateBtn.classList.remove('active');
+            }
+        });
+    }
 });

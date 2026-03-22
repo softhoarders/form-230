@@ -2,6 +2,8 @@ import os
 import io
 import datetime
 import requests
+import base64
+import tempfile
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -121,17 +123,14 @@ def generate_pdf(submission):
 
     # Admin Signature (Semnătura împuternicitului) - aligned towards bottom right
     if config.signature_base64:
-        import base64
-        import tempfile
         try:
             head, b64data = config.signature_base64.split(',', 1)
             sig_data = base64.b64decode(b64data)
-            with tempfile.NamedFileMode('w+b', delete=False, suffix='.png') as tmp:
+            with tempfile.NamedTemporaryFile('w+b', delete=False, suffix='.png') as tmp:
                 tmp.write(sig_data)
                 tmp.flush()
                 can.drawImage(tmp.name, 400, 50, width=120, height=45, mask='auto')
-                import os
-                os.remove(tmp.name)
+                os.unlink(tmp.name)
         except Exception as e:
             print("Error drawing signature:", e)
     

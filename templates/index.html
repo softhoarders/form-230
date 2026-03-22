@@ -4,7 +4,11 @@
 <div class="donation-banner intro-fade">
     <strong>{{ t.donate_msg }}</strong><br>
     <p class="tax-deductible-note">Your donation is 100% tax deductible for people in the US</p>
-    <a href="https://hcb.hackclub.com/donations/start/soft-hoarders" target="_blank" class="btn btn-donate mt-1">{{ t.donate_btn }}</a>
+    <div class="gdpr-consent">
+        <input type="checkbox" id="gdpr-consent" name="gdpr-consent" required>
+        <label for="gdpr-consent">I agree to the processing of my personal data in accordance with GDPR</label>
+    </div>
+    <a href="https://hcb.hackclub.com/donations/start/soft-hoarders" target="_blank" class="btn btn-donate mt-1" id="donate-btn" disabled>{{ t.donate_btn }}</a>
 </div>
 
 <div class="form-container intro-fade">

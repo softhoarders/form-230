@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="form-container intro-fade" style="max-width: 400px; margin: 4rem auto;">
-    <h1 class="text-center mb-2">Admin Login</h1>
+<div class="form-container intro-fade" style="max-width: 400px; margin: 4rem auto; background-color: var(--card-bg); border: 1px solid var(--border);">
+    <h1 class="text-center mb-2" style="color: var(--text-color);">Admin Login</h1>
     <form method="POST" action="/login">
         <div class="row">
             <div class="form-group col-full">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+                <label for="username" style="color: var(--text-color);">Username</label>
+                <input type="text" id="username" name="username" required style="background-color: var(--input-bg); color: var(--text-color); border: 1px solid var(--border);">
             </div>
         </div>
         <div class="row">
             <div class="form-group col-full">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+                <label for="password" style="color: var(--text-color);">Password</label>
+                <input type="password" id="password" name="password" required style="background-color: var(--input-bg); color: var(--text-color); border: 1px solid var(--border);">
             </div>
         </div>
         <button type="submit" class="btn btn-primary mt-2">Log In</button>
