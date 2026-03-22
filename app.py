@@ -83,7 +83,18 @@ def clean_text(text):
         'ș': 's', 'Ș': 'S',
         'ț': 't', 'Ț': 'T',
         'ş': 's', 'Ş': 'S',
-        'ţ': 't', 'Ţ': 'T'
+        'ţ': 't', 'Ţ': 'T',
+        'á': 'a', 'Á': 'A',
+        'é': 'e', 'É': 'E',
+        'í': 'i', 'Í': 'I',
+        'ó': 'o', 'Ó': 'O',
+        'ö': 'o', 'Ö': 'O',
+        'ő': 'o', 'Ő': 'O',
+        'ú': 'u', 'Ú': 'U',
+        'ü': 'u', 'Ü': 'U',
+        'ű': 'u', 'Ű': 'U',
+        'ä': 'a', 'Ä': 'A',
+        'ß': 'ss'
     }
     for search, replace in diacritics.items():
         text = text.replace(search, replace)
@@ -102,29 +113,29 @@ def generate_pdf(submission):
     can.setFont("Helvetica-Bold", 10)
 
     # I. Date de identificare a contribuabilului
-    can.drawString(65, 669, clean_text(submission.nume).upper())
+    can.drawString(85, 669, clean_text(submission.nume).upper())
     can.drawString(295, 669, clean_text(submission.initiala_tatalui).upper())
-    can.drawString(65, 647, clean_text(submission.prenume).upper())
+    can.drawString(85, 647, clean_text(submission.prenume).upper())
 
     # CNP spaced out to fit exactly inside the 13 small boxes (+18.48 pitch)
-    cnp_x = 352
+    cnp_x = 333.5
     for char in submission.cnp:
         can.drawString(cnp_x, 660, char)
         cnp_x += 18.48
 
     # Adresa (Opțional)
-    if submission.strada: can.drawString(65, 625, clean_text(submission.strada))
-    if submission.numar: can.drawString(288, 625, clean_text(submission.numar))
-    if submission.bloc: can.drawString(48, 603, clean_text(submission.bloc))
-    if submission.scara: can.drawString(108, 603, clean_text(submission.scara))
-    if submission.apartament: can.drawString(186, 603, clean_text(submission.apartament))
+    if submission.strada: can.drawString(80, 625, clean_text(submission.strada))
+    if submission.numar: can.drawString(310, 625, clean_text(submission.numar))
+    if submission.bloc: can.drawString(60, 603, clean_text(submission.bloc))
+    if submission.scara: can.drawString(120, 603, clean_text(submission.scara))
+    if submission.apartament: can.drawString(175, 603, clean_text(submission.apartament))
 
-    if submission.judet: can.drawString(255, 603, clean_text(submission.judet).upper())
-    if submission.localitate: can.drawString(65, 581, clean_text(submission.localitate).upper())
-    if submission.cod_postal: can.drawString(265, 581, clean_text(submission.cod_postal))
+    if submission.judet: can.drawString(240, 603, clean_text(submission.judet).upper())
+    if submission.localitate: can.drawString(100, 581, clean_text(submission.localitate).upper())
+    if submission.cod_postal: can.drawString(300, 581, clean_text(submission.cod_postal))
 
-    can.drawString(363, 597, f"{clean_text(submission.telefon) or ''}")
-    can.drawString(363, 637, f"{clean_text(submission.email) or ''}")
+    can.drawString(115, 559, f"{clean_text(submission.telefon) or ''}")
+    can.drawString(245, 559, f"{clean_text(submission.email) or ''}")
 
     can.setFont("Helvetica-Bold", 10)
     # NGO details
