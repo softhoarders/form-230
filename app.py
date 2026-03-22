@@ -72,48 +72,57 @@ def verify_turnstile(token):
     result = r.json()
     return result.get('success', False)
 
+def clean_text(text):
+    if text is None:
+        return ""
+    text = str(text)
+    diacritics = {
+        'ă': 'a', 'Ă': 'A',
+        'â': 'a', 'Â': 'A',
+        'î': 'i', 'Î': 'I',
+        'ș': 's', 'Ș': 'S',
+        'ț': 't', 'Ț': 'T'
+    }
+    for search, replace in diacritics.items():
+        text = text.replace(search, replace)
+    return text
+
 def generate_pdf(submission):
-    # This assumes there is a template named form_230_template.pdf in the root directory
-    template_path = os.path.join(app.root_path, 'form_230_template.pdf')
+    # This assumes there is a template named template.pdf in the root directory
+    template_path = os.path.join(app.root_path, 'template.pdf')
     if not os.path.exists(template_path):
         return None  # Template not found
-    
+
     config = AdminConfig.query.first()
-    
+
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=A4)
-    # Aceste coordonate sunt aproximative pentru un Formular 230 ANAF standard.
-    # Necesita ajustari usoare de cativa pixeli in functie de marginea la imprimare.
     can.setFont("Helvetica-Bold", 10)
-    
+
     # I. Date de identificare a contribuabilului
-    can.drawString(65, 669, submission.nume.upper())
-    can.drawString(295, 669, submission.initiala_tatalui.upper())
-    can.drawString(65, 647, submission.prenume.upper())
-    
+    can.drawString(65, 669, clean_text(submission.nume).upper())
+    can.drawString(295, 669, clean_text(submission.initiala_tatalui).upper())
+    can.drawString(65, 647, clean_text(submission.prenume).upper())
+
     # CNP spaced out to fit exactly inside the 13 small boxes (+18.48 pitch)
     cnp_x = 352
     for char in submission.cnp:
         can.drawString(cnp_x, 660, char)
         cnp_x += 18.48
-    
+
     # Adresa (Opțional)
-    if submission.strada: can.drawString(65, 625, f"{submission.strada}")
-    if submission.numar: can.drawString(288, 625, f"{submission.numar}")
-    if submission.bloc: can.drawString(48, 603, f"{submission.bloc}")
-    if submission.scara: can.drawString(108, 603, f"{submission.scara}")
-    if submission.apartament: can.drawString(186, 603, f"{submission.apartament}")
-    
-    if submission.judet: can.drawString(255, 603, submission.judet.upper())
-    if submission.localitate: can.drawString(65, 581, submission.localitate.upper())
-    if submission.cod_postal: can.drawString(265, 581, f"{submission.cod_postal}")
-    
-    can.drawString(363, 597, f"{submission.telefon or ''}")
-    can.drawString(363, 637, f"{submission.email or ''}")
-    
-    # II. Destinația sumei reprezentând până la 3.5% (Bifa)
-    can.setFont("Helvetica-Bold", 12)
-    can.drawString(219, 436, "X")
+    if submission.strada: can.drawString(65, 625, clean_text(submission.strada))
+    if submission.numar: can.drawString(288, 625, clean_text(submission.numar))
+    if submission.bloc: can.drawString(48, 603, clean_text(submission.bloc))
+    if submission.scara: can.drawString(108, 603, clean_text(submission.scara))
+    if submission.apartament: can.drawString(186, 603, clean_text(submission.apartament))
+
+    if submission.judet: can.drawString(255, 603, clean_text(submission.judet).upper())
+    if submission.localitate: can.drawString(65, 581, clean_text(submission.localitate).upper())
+    if submission.cod_postal: can.drawString(265, 581, clean_text(submission.cod_postal))
+
+    can.drawString(363, 597, f"{clean_text(submission.telefon) or ''}")
+    can.drawString(363, 637, f"{clean_text(submission.email) or ''}")
 
     can.setFont("Helvetica-Bold", 10)
     # NGO details
