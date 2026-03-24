@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-container intro-fade">
+    <h1 class="text-center mb-2">Privacy Policy</h1>
+    <div style="line-height: 1.6; font-size: 0.95rem;">
+        <p><strong>General Information</strong><br>Your privacy is important to us. This policy explains how we process the data you submit.</p>
+        <p><strong>Data Processing</strong><br>The personal data collected (Name, CNP, Address, Contact Info, Signature) is strictly used to automatically generate Form 230.</p>
+        <p><strong>Data Storage and Security</strong><br>We implement sensible security measures to protect your data. All communication is encrypted and server storage is minimized strictly to necessary temporary processing prior to form approval.</p>
+        <p><strong>Third Parties</strong><br>We do not sell, trade, or otherwise transfer to outside parties your personally identifiable information unless legally obliged.</p>
+        <p><strong>GDPR Compliance</strong><br>You have the right to request access, modification, or deletion of your data at any time by contacting our support line.</p>
+        <br>
+        <p class="text-center mt-2"><a href="{{ url_for('index') }}" class="btn btn-primary" style="text-decoration:none;">&larr; Back to Form</a></p>
+    </div>
+</div>
+{% endblock %}

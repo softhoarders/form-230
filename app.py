@@ -302,6 +302,15 @@ def index():
         return redirect(url_for('index'))
     return render_template('index.html')
 
+
+@app.route('/tos')
+def tos():
+    return render_template('tos.html')
+
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':

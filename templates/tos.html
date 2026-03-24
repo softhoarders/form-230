@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="form-container intro-fade">
+    <h1 class="text-center mb-2">Terms of Service</h1>
+    <div style="line-height: 1.6; font-size: 0.95rem;">
+        <p><strong>1. Acceptance of Terms</strong><br>By accessing and using this site, you accept and agree to be bound by the terms and provision of this agreement.</p>
+        <p><strong>2. Description of Service</strong><br>We provide users with the Form 230 generation tool. The PDF generated is solely based on user inputs.</p>
+        <p><strong>3. Use of the Site</strong><br>You may use the Service only for lawful purposes across the required legal formats. You agree not to take any action that might compromise the security of the site.</p>
+        <p><strong>4. User Data</strong><br>You are responsible for the data you enter. We process data strictly to format a PDF file.</p>
+        <p><strong>5. Modifications</strong><br>We reserve the right to modify these terms at any time. Your continued use of the service constitutes your agreement to such modifications.</p>
+        <br>
+        <p class="text-center mt-2"><a href="{{ url_for('index') }}" class="btn btn-primary" style="text-decoration:none;">&larr; Back to Form</a></p>
+    </div>
+</div>
+{% endblock %}

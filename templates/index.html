@@ -81,11 +81,20 @@
                 </div>
             </div>
 
-            <div class="row mb-1"><div class="gdpr-consent">
-        <input type="checkbox" id="gdpr-consent" name="gdpr-consent" required>
-        <label for="gdpr-consent">{{ t.gdpr_consent }}</label>
-    </div></div>
-            <legend class="mt-2">{{ t.contact_title }}</legend>
+            
+            <label class="glass-checkbox input-container mb-1 mt-1" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" id="doi_ani" name="doi_ani">
+                <span>{{ t.doi_ani }}</span>
+            </label>
+
+            <label class="glass-checkbox input-container mb-2" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" id="gdpr-consent" name="gdpr-consent" required>
+                <span>{{ t.gdpr_consent }}</span>
+            </label>
+        </fieldset>
+        
+        <fieldset class="mt-2 text-fieldset" style="background: rgba(128,128,128,0.05);">
+            <legend>{{ t.contact_title }}</legend>
             <p class="text-muted" style="margin-top: 0; font-size: 0.85rem;">{{ t.contact_desc }}</p>
             <div class="row">
                 <div class="form-group col-2">
@@ -101,10 +110,7 @@
         
         <fieldset class="mt-2">
             <legend>{{ t.signature_label }}</legend>
-            <div style="margin-bottom: 15px;">
-                <input type="checkbox" id="doi_ani" name="doi_ani">
-                <label for="doi_ani" style="display:inline; margin-left: 5px;">{{ t.doi_ani }}</label>
-            </div>
+            
             <div class="signature-container" style="border: 1px solid #ccc; background: #fff; width: 100%; max-width: 400px; height: 150px; border-radius: 8px; position: relative; margin-bottom: 10px;">
                 <canvas id="user-signature-pad" style="width: 100%; height: 100%; border-radius: 8px; touch-action: none;"></canvas>
             </div>
@@ -116,6 +122,10 @@
             <div class="cf-turnstile mt-2" data-sitekey="1x00000000000000000000AA"></div>
             <button type="submit" class="btn btn-primary mt-2">{{ t.submit_btn }}</button>
             <p class="terms mt-1">{{ t.terms }}</p>
+<div class="legal-links text-center mt-1" style="font-size: 0.85rem;">
+    <a href="{{ url_for('tos') }}" style="color: var(--primary); text-decoration: none;">Terms of Service</a> | 
+    <a href="{{ url_for('privacy') }}" style="color: var(--primary); text-decoration: none;">Privacy Policy</a>
+</div>
         </div>
     </form>
 </div>

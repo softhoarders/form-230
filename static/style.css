@@ -517,3 +517,19 @@ body.dark-mode .pill-lang-switcher .lang-pill:hover {
     border: 1px solid var(--glass-border);
     font-size: 0.9em;
 }
+
+/* Glass Checkbox */
+.glass-checkbox {
+    background: rgba(128, 128, 128, 0.05);
+    border: 1px solid var(--glass-border, rgba(255,255,255,0.1));
+    border-radius: 8px;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+}
+.glass-checkbox:hover {
+    background: rgba(128, 128, 128, 0.1);
+}
+.glass-checkbox input {
+    margin: 0;
+    cursor: pointer;
+}
