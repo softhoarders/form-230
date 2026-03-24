@@ -11,6 +11,9 @@ from PyPDF2 import PdfReader, PdfWriter
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from translations import TRANSLATIONS
+import dotenv
+
+dotenv.load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_key_change_in_production'
@@ -23,8 +26,9 @@ db = SQLAlchemy(app)
 GENERATED_DIR = os.path.join(app.root_path, 'generated_forms')
 os.makedirs(GENERATED_DIR, exist_ok=True)
 
-# Turnstile config (Use test keys or replace with real ones)
-TURNSTILE_SECRET_KEY = '1x0000000000000000000000000000000AA'
+# Turnstile config from environment variables
+TURNSTILE_SECRET_KEY = os.environ.get('TURNSTILE_SECRET_KEY', '1x0000000000000000000000000000000AA')
+TURNSTILE_SITE_KEY = os.environ.get('TURNSTILE_SITE_KEY', '1x00000000000000000000AA')
 
 # Models
 class Submission(db.Model):
@@ -260,7 +264,7 @@ def set_language():
 def inject_translations():
     lang = session.get('lang', 'ro')
     t = TRANSLATIONS.get(lang, TRANSLATIONS['ro'])
-    return dict(t=t, lang=lang)
+    return dict(t=t, lang=lang, TURNSTILE_SITE_KEY=TURNSTILE_SITE_KEY)
 
 @app.route('/lang/<lang_code>')
 def set_lang_route(lang_code):
