@@ -58,3 +58,103 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+// Signature Pad Logic
+function initSignaturePad(canvasId, hiddenInputId, clearBtnId) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const hiddenInput = document.getElementById(hiddenInputId);
+    const clearBtn = document.getElementById(clearBtnId);
+
+    function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+    }
+    window.addEventListener('resize', resizeCanvas);
+    setTimeout(resizeCanvas, 100);
+
+    let isDrawing = false;
+    let hasDrawn = false;
+
+    function getCoordinates(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        return {
+            x: clientX - rect.left,
+            y: clientY - rect.top
+        };
+    }
+
+    function startDraw(e) {
+        isDrawing = true;
+        hasDrawn = true;
+        const coords = getCoordinates(e);
+        ctx.beginPath();
+        ctx.moveTo(coords.x, coords.y);
+        e.preventDefault();
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        const coords = getCoordinates(e);
+        ctx.lineTo(coords.x, coords.y);
+        ctx.stroke();
+        e.preventDefault();
+    }
+
+    function stopDraw() {
+        if (isDrawing) {
+            isDrawing = false;
+            updateHiddenInput();
+        }
+    }
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDraw);
+    canvas.addEventListener('mouseleave', stopDraw);
+
+    canvas.addEventListener('touchstart', startDraw, {passive: false});
+    canvas.addEventListener('touchmove', draw, {passive: false});
+    canvas.addEventListener('touchend', stopDraw);
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hiddenInput.value = '';
+            hasDrawn = false;
+        });
+    }
+
+    function updateHiddenInput() {
+        if (hasDrawn) {
+            hiddenInput.value = canvas.toDataURL('image/png');
+        }
+    }
+
+    const form = canvas.closest('form');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            if (!hasDrawn && window.location.pathname === '/') {
+                e.preventDefault();
+                alert('Vă rugăm să semnați înainte de a trimite. / Please provide a signature before submitting.');
+            } else {
+                updateHiddenInput();
+            }
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initSignaturePad('user-signature-pad', 'user_signature_base64', 'clear-signature');
+    initSignaturePad('admin-signature-pad', 'signature_base64', 'clear-admin-signature');
+});

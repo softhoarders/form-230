@@ -34,14 +34,17 @@
                     <input type="text" name="ong_cont_bancar" value="{{ config.ong_cont_bancar }}" required>
                 </div>
                 <div class="form-group mb-2">
-                    <label>Semnătură (Imagine PNG/JPG, transparent obligatoriu pentru aspect bun)</label>
-                    <input type="file" name="signature_file" accept="image/*">
+                    <label>Semnătură curentă (sau Desenează mai jos pentru a o schimba)</label>
                     {% if config.signature_base64 %}
-                    <div style="margin-top: 10px;">
-                        <small class="text-muted">Semnătura actuală:</small><br>
+                    <div style="margin-bottom: 10px;">
                         <img src="{{ config.signature_base64 }}" alt="Signature" style="max-height: 50px; background: white; padding: 5px; border: 1px dashed #ccc;">
                     </div>
                     {% endif %}
+                    <div class="signature-container" style="border: 1px solid #ccc; background: #fff; width: 100%; max-width: 400px; height: 150px; border-radius: 8px; position: relative; margin-bottom: 10px;">
+                        <canvas id="admin-signature-pad" style="width: 100%; height: 100%; border-radius: 8px; touch-action: none;"></canvas>
+                    </div>
+                    <button type="button" id="clear-admin-signature" class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;">Șterge Semnătura</button>
+                    <input type="hidden" name="signature_base64" id="signature_base64">
                 </div>
                 <button type="submit" class="btn btn-primary mt-1" style="background-color: var(--primary);">Salvează</button>
             </form>

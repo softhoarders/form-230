@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF Coord Mapper</title>
+    <style>
+        body { margin: 0; padding: 20px; background: #333; color: white; font-family: sans-serif; }
+        #canvas {
+            position: relative;
+            /* Exactly 2x A4 size (595.276 * 2, 841.890 * 2) */
+            width: 1190.55px;
+            height: 1683.78px;
+            background: url('/static/template_bg.png') no-repeat;
+            background-size: 100% 100%;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            background-color: white;
+            overflow: hidden;
+        }
+        .drag {
+            position: absolute;
+            border-bottom: 2px solid red;
+            border-left: 2px solid red;
+            background: rgba(255, 255, 0, 0.4);
+            color: black;
+            font-family: Helvetica, sans-serif;
+            font-size: 20px; /* 10pt * 2 */
+            font-weight: bold;
+            cursor: move;
+            white-space: nowrap;
+            user-select: none;
+            padding-bottom: 2px;
+            line-height: 1;
+        }
+        .lbl {
+            position: absolute;
+            top: -15px;
+            left: 0;
+            font-size: 12px;
+            background: black;
+            color: lime;
+            padding: 2px 4px;
+        }
+        #controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            border-radius: 8px;
+            z-index: 9999;
+        }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div id="controls">
+        <button onclick="saveCoords()">Save Coordinates</button>
+        <p id="status"></p>
+        <p>Drag the yellow boxes to align the RED BOTTOM-LEFT CORNER where text should start. <br>Then click save. Refresh to reload from saved states.</p>
+    </div>
+    <div id="canvas">
+        {% for key, val in coords.items() %}
+        <div class="drag" id="{{ key }}" data-id="{{ key }}" style="left: {{ val.x * 2 }}px; bottom: {{ val.y * 2 }}px;">
+            <div class="lbl" id="lbl-{{ key }}">{{ key }} ({{ val.x }}, {{ val.y }})</div>
+            {{ val.text }}
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        let isDragging = false;
+        let el = null;
+        let offsetX = 0, offsetY = 0;
+
+        document.addEventListener('mousedown', e => {
+            let target = e.target.closest('.drag');
+            if(target) {
+                isDragging = true;
+                el = target;
+                offsetX = e.clientX - el.getBoundingClientRect().left;
+                offsetY = el.getBoundingClientRect().bottom - e.clientY;
+            }
+        });
+
+        document.addEventListener('mousemove', e => {
+            if(isDragging && el) {
+                let container = document.getElementById('canvas').getBoundingClientRect();
+                let newLeft = e.clientX - container.left - offsetX;
+                // Bottom is measured from max height of container against dragged element's custom offset 
+                let newBottom = container.bottom - e.clientY - offsetY;
+                
+                el.style.left = newLeft + 'px';
+                el.style.bottom = newBottom + 'px';
+
+                let x = +(newLeft / 2).toFixed(2);
+                let y = +(newBottom / 2).toFixed(2);
+                document.getElementById('lbl-' + el.id).innerText = `${el.id} (${x}, ${y})`;
+            }
+        });
+
+        document.addEventListener('mouseup', e => {
+            isDragging = false;
+            el = null;
+        });
+
+        function saveCoords() {
+            let data = {{ coords|tojson }};
+            for (let key in data) {
+                let node = document.getElementById(key);
+                if (node) {
+                    let newLeft = parseFloat(node.style.left || 0);
+                    let newBottom = parseFloat(node.style.bottom || 0);
+                    data[key].x = +(newLeft / 2).toFixed(2);
+                    data[key].y = +(newBottom / 2).toFixed(2);
+                }
+            }
+            
+            fetch('/save', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            }).then(r => r.json()).then(res => {
+                document.getElementById('status').innerText = 'Saved at ' + new Date().toLocaleTimeString();
+                setTimeout(() => document.getElementById('status').innerText='', 3000);
+            });
+        }
+    </script>
+</body>
+</html>

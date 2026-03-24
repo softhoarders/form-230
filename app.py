@@ -1,6 +1,7 @@
 import os
 import io
 import datetime
+import json
 import requests
 import base64
 import tempfile
@@ -45,6 +46,7 @@ class Submission(db.Model):
     status = db.Column(db.String(20), default='pending') # pending, approved
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     generated_pdf_path = db.Column(db.String(255), nullable=True)
+    user_signature_base64 = db.Column(db.Text, nullable=True) # allow storing user signature data
 
 class AdminConfig(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -99,6 +101,9 @@ def clean_text(text):
         text = text.replace(search, replace)
     return text
 
+def get_fiscal_year():
+    return str(datetime.datetime.now().year - 1)
+
 def generate_pdf(submission):
     # This assumes there is a template named template.pdf in the root directory
     template_path = os.path.join(app.root_path, 'template.pdf')
@@ -107,61 +112,104 @@ def generate_pdf(submission):
 
     config = AdminConfig.query.first()
 
+    coords_path = os.path.join(app.root_path, 'coords.json')
+    coords = {}
+    if os.path.exists(coords_path):
+        import json
+        with open(coords_path) as f:
+            coords = json.load(f)
+
+    def c(key, default_x, default_y):
+        if key in coords:
+            return (coords[key]["x"], coords[key]["y"])
+        return (default_x, default_y)
+
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=A4)
     can.setFont("Helvetica-Bold", 10)
-
     can.setFillColorRGB(0, 0, 0) # Ensure text is explicitly black
     
+    # Anul fiscal
+    year_str = get_fiscal_year()
+    for i, char in enumerate(year_str):
+        x, y = c(f"anul_{i}", 100 + i*15, 700)
+        can.drawString(x, y, char)
+
     # I. Date de identificare a contribuabilului
-    can.drawString(55, 673, clean_text(submission.nume).upper())
-    can.drawString(292, 673, clean_text(submission.initiala_tatalui).upper())
-    can.drawString(65, 648, clean_text(submission.prenume).upper())
+    x, y = c("nume", 35, 660)
+    if submission.nume: can.drawString(x, y, clean_text(submission.nume).upper())
+    x, y = c("initiala_tatalui", 335, 660)
+    if submission.initiala_tatalui: can.drawString(x, y, clean_text(submission.initiala_tatalui).upper())
+    x, y = c("prenume", 35, 638)
+    if submission.prenume: can.drawString(x, y, clean_text(submission.prenume).upper())
 
-    # CNP spaced out to fit exactly inside the 13 small boxes (+18.48 pitch)
-    cnp_x = 333.5
-    for char in submission.cnp:
-        can.drawString(cnp_x, 660, char)
-        cnp_x += 18.48
+    if submission.cnp:
+        for i, char in enumerate(submission.cnp[:13]):
+            x, y = c(f"cnp_{i}", 371 + i*15, 660)
+            can.drawString(x, y, char)
 
-    # Adresa (Opțional)
-    if submission.strada: can.drawString(55, 625, clean_text(submission.strada))
-    if submission.numar: can.drawString(286, 625, clean_text(submission.numar))
-    if submission.bloc: can.drawString(48, 603, clean_text(submission.bloc))
-    if submission.scara: can.drawString(106, 603, clean_text(submission.scara))
-    if submission.apartament: can.drawString(188, 603, clean_text(submission.apartament))
-    if submission.judet: can.drawString(256, 603, clean_text(submission.judet).upper())
+    x, y = c("strada", 35, 618)
+    if submission.strada: can.drawString(x, y, clean_text(submission.strada))
+    x, y = c("numar", 270, 618)
+    if submission.numar: can.drawString(x, y, clean_text(submission.numar))
+    x, y = c("email", 365, 638)
+    if submission.email: can.drawString(x, y, clean_text(submission.email))
 
-    if submission.localitate: can.drawString(66, 581, clean_text(submission.localitate).upper())
-    if submission.cod_postal: can.drawString(262, 581, clean_text(submission.cod_postal))
-    
-    can.drawString(361, 610, f"{clean_text(submission.telefon) or ''}")
-    can.drawString(361, 637, f"{clean_text(submission.email) or ''}")
+    x, y = c("bloc", 35, 595)
+    if submission.bloc: can.drawString(x, y, clean_text(submission.bloc))
+    x, y = c("scara", 95, 595)
+    if submission.scara: can.drawString(x, y, clean_text(submission.scara))
+    x, y = c("apartament", 180, 595)
+    if submission.apartament: can.drawString(x, y, clean_text(submission.apartament))
+    x, y = c("judet", 220, 595)
+    if submission.judet: can.drawString(x, y, clean_text(submission.judet).upper())
+    x, y = c("telefon", 360, 595)
+    if submission.telefon: can.drawString(x, y, clean_text(submission.telefon))
+
+    x, y = c("localitate", 35, 574)
+    if submission.localitate: can.drawString(x, y, clean_text(submission.localitate).upper())
+    x, y = c("cod_postal", 230, 574)
+    if submission.cod_postal: can.drawString(x, y, clean_text(submission.cod_postal))
 
     can.setFont("Helvetica-Bold", 10)
     # NGO details
-    can.drawString(178, 374, config.ong_name.upper() if config.ong_name else '')
-    can.drawString(102, 365, config.ong_cui if config.ong_cui else '')
-    can.drawString(102, 351, config.ong_iban if config.ong_iban else '')
+    x, y = c("procent", 425, 412)
+    can.drawString(x, y, "3.5")
+    x, y = c("ong_name", 150, 374)
+    if config and config.ong_name: can.drawString(x, y, config.ong_name.upper())
+    x, y = c("ong_cui", 102, 365)
+    if config and config.ong_cui: can.drawString(x, y, config.ong_cui)
+    x, y = c("ong_iban", 95, 348)
+    if config and config.ong_iban: can.drawString(x, y, config.ong_iban)
 
-    # Admin Signature (Semnătura împuternicitului) - aligned towards bottom right
-    if config.signature_base64:
+    # User Signature
+    x, y = c("user_signature", 100, 42)
+    if submission.user_signature_base64:
+        try:
+            head, b64data = submission.user_signature_base64.split(',', 1)
+            sig_data = base64.b64decode(b64data)
+            with tempfile.NamedTemporaryFile('w+b', delete=False, suffix='.png') as tmp:
+                tmp.write(sig_data)
+                tmp.flush()
+                can.drawImage(tmp.name, x, y, width=120, height=45, mask='auto')
+                os.unlink(tmp.name)
+        except Exception as e:
+            print("Error drawing user signature:", e)
+
+    # Admin Signature
+    x, y = c("admin_signature", 400, 50)
+    if config and config.signature_base64:
         try:
             head, b64data = config.signature_base64.split(',', 1)
             sig_data = base64.b64decode(b64data)
             with tempfile.NamedTemporaryFile('w+b', delete=False, suffix='.png') as tmp:
                 tmp.write(sig_data)
                 tmp.flush()
-                can.drawImage(tmp.name, 400, 50, width=120, height=45, mask='auto')
+                can.drawImage(tmp.name, x, y, width=120, height=45, mask='auto')
                 os.unlink(tmp.name)
         except Exception as e:
             print("Error drawing signature:", e)
     
-    # Date today near signature
-    import datetime
-    can.setFont("Helvetica", 10)
-    can.drawString(460, 42, datetime.datetime.now().strftime("%d.%m.%Y"))
-
     can.save()
     packet.seek(0)
     
@@ -235,7 +283,8 @@ def index():
             apartament=request.form.get('apartament'),
             cod_postal=request.form.get('cod_postal'),
             telefon=request.form.get('telefon'),
-            email=request.form.get('email')
+            email=request.form.get('email'),
+            user_signature_base64=request.form.get('user_signature_base64')
         )
         db.session.add(new_sub)
         db.session.commit()
@@ -285,9 +334,14 @@ def update_config():
     config.ong_sediu = request.form.get('ong_sediu')
     config.ong_cont_bancar = request.form.get('ong_cont_bancar')
     
-    # Handle signature file
+    # Handle signature file or pad
     sig_file = request.files.get('signature_file')
-    if sig_file and sig_file.filename != '':
+    pad_data = request.form.get('signature_base64')
+    
+    if pad_data:
+        # User drew a signature
+        config.signature_base64 = pad_data
+    elif sig_file and sig_file.filename != '':
         import base64
         import mimetypes
         mimetype = mimetypes.guess_type(sig_file.filename)[0] or 'image/png'

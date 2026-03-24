@@ -1,0 +1,192 @@
+{
+    "2years": {
+        "text": "X",
+        "x": 324.99,
+        "y": 425.5
+    },
+    "admin_signature": {
+        "text": "[SEMNATURA ADM]",
+        "x": 393,
+        "y": 140.5
+    },
+    "anul_0": {
+        "text": "Y0",
+        "x": 302.5,
+        "y": 733.5
+    },
+    "anul_1": {
+        "text": "Y1",
+        "x": 320,
+        "y": 733
+    },
+    "anul_2": {
+        "text": "Y2",
+        "x": 338,
+        "y": 733
+    },
+    "anul_3": {
+        "text": "Y3",
+        "x": 356,
+        "y": 733
+    },
+    "apartament": {
+        "text": "AP99",
+        "x": 183,
+        "y": 612.5
+    },
+    "bloc": {
+        "text": "BLOC12",
+        "x": 46,
+        "y": 612.5
+    },
+    "cnp_0": {
+        "text": "0",
+        "x": 333.5,
+        "y": 670.5
+    },
+    "cnp_1": {
+        "text": "1",
+        "x": 355,
+        "y": 670.5
+    },
+    "cnp_10": {
+        "text": "0",
+        "x": 520.49,
+        "y": 670.49
+    },
+    "cnp_11": {
+        "text": "1",
+        "x": 539.99,
+        "y": 670.49
+    },
+    "cnp_12": {
+        "text": "2",
+        "x": 556.99,
+        "y": 670.49
+    },
+    "cnp_2": {
+        "text": "2",
+        "x": 374,
+        "y": 670.5
+    },
+    "cnp_3": {
+        "text": "3",
+        "x": 390.5,
+        "y": 670.5
+    },
+    "cnp_4": {
+        "text": "4",
+        "x": 409.5,
+        "y": 670.5
+    },
+    "cnp_5": {
+        "text": "5",
+        "x": 428.5,
+        "y": 670.5
+    },
+    "cnp_6": {
+        "text": "6",
+        "x": 447,
+        "y": 670.5
+    },
+    "cnp_7": {
+        "text": "7",
+        "x": 466.49,
+        "y": 670.49
+    },
+    "cnp_8": {
+        "text": "8",
+        "x": 483.49,
+        "y": 670.49
+    },
+    "cnp_9": {
+        "text": "9",
+        "x": 501.99,
+        "y": 670.49
+    },
+    "cod_postal": {
+        "text": "123456",
+        "x": 262.5,
+        "y": 590.49
+    },
+    "email": {
+        "text": "exemplu.de.email.foarte.lung@domeniu.com",
+        "x": 361.5,
+        "y": 647.5
+    },
+    "initiala_tatalui": {
+        "text": "A.B.C.",
+        "x": 294.5,
+        "y": 679.5
+    },
+    "judet": {
+        "text": "JUDET/SECTOR LUNG",
+        "x": 252.49,
+        "y": 612.5
+    },
+    "localitate": {
+        "text": "LOCALITATE FOARTE LUNGA EX",
+        "x": 65.5,
+        "y": 589.99
+    },
+    "numar": {
+        "text": "9999",
+        "x": 288,
+        "y": 635
+    },
+    "nume": {
+        "text": "NUME FOARTE LUNG TEST",
+        "x": 63.5,
+        "y": 679.5
+    },
+    "ong_cui": {
+        "text": "RO12345678",
+        "x": 239.99,
+        "y": 404.5
+    },
+    "ong_iban": {
+        "text": "RO99ROEX0000000000000000",
+        "x": 101.49,
+        "y": 359.99
+    },
+    "ong_name": {
+        "text": "ASOCIATIA ONG NUME FOARTE DEMN DE LUNG",
+        "x": 177.5,
+        "y": 382.49
+    },
+    "prenume": {
+        "text": "PRENUME FOARTE LUNG TEST",
+        "x": 64,
+        "y": 657
+    },
+    "procent": {
+        "text": "3.5",
+        "x": 121.5,
+        "y": 336.5
+    },
+    "scara": {
+        "text": "SCARA9",
+        "x": 106,
+        "y": 612
+    },
+    "strada": {
+        "text": "STRADA EXEMPLU FOARTE LUNGA NR 99",
+        "x": 62.5,
+        "y": 634.99
+    },
+    "telefon": {
+        "text": "+40712345678",
+        "x": 363.5,
+        "y": 620
+    },
+    "user_signature": {
+        "text": "[SEMNATURA USER]",
+        "x": 139,
+        "y": 140.5
+    },
+    "x": {
+        "text": "X",
+        "x": 218.99,
+        "y": 444.5
+    }
+}
