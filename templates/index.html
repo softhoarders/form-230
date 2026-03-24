@@ -98,6 +98,10 @@
         
         <fieldset class="mt-2">
             <legend>{{ t.signature_label }}</legend>
+            <div style="margin-bottom: 15px;">
+                <input type="checkbox" id="doi_ani" name="doi_ani">
+                <label for="doi_ani" style="display:inline; margin-left: 5px;">{{ t.doi_ani }}</label>
+            </div>
             <div class="signature-container" style="border: 1px solid #ccc; background: #fff; width: 100%; max-width: 400px; height: 150px; border-radius: 8px; position: relative; margin-bottom: 10px;">
                 <canvas id="user-signature-pad" style="width: 100%; height: 100%; border-radius: 8px; touch-action: none;"></canvas>
             </div>

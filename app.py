@@ -43,6 +43,7 @@ class Submission(db.Model):
     cod_postal = db.Column(db.String(20), nullable=True)
     telefon = db.Column(db.String(20), nullable=True)
     email = db.Column(db.String(120), nullable=True)
+    doi_ani = db.Column(db.Boolean, default=False)
     status = db.Column(db.String(20), default='pending') # pending, approved
     created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     generated_pdf_path = db.Column(db.String(255), nullable=True)
@@ -120,13 +121,16 @@ def generate_pdf(submission):
             coords = json.load(f)
 
     def c(key, default_x, default_y):
+        # Global offset to move all text right and adjust vertically
+        offset_x = 4
+        offset_y = -1
         if key in coords:
-            return (coords[key]["x"], coords[key]["y"])
-        return (default_x, default_y)
+            return (coords[key]["x"] + offset_x, coords[key]["y"] + offset_y)
+        return (default_x + offset_x, default_y + offset_y)
 
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=A4)
-    can.setFont("Helvetica-Bold", 10)
+    can.setFont("Helvetica-Bold", 12)
     can.setFillColorRGB(0, 0, 0) # Ensure text is explicitly black
     
     # Anul fiscal
@@ -175,6 +179,11 @@ def generate_pdf(submission):
     # NGO details
     x, y = c("procent", 425, 412)
     can.drawString(x, y, "3.5")
+    
+    if submission.doi_ani:
+        x_2years, y_2years = c("2years", 324.99, 425.5)
+        can.drawString(x_2years, y_2years, "X")
+
     x, y = c("ong_name", 150, 374)
     if config and config.ong_name: can.drawString(x, y, config.ong_name.upper())
     x, y = c("ong_cui", 102, 365)
@@ -284,6 +293,7 @@ def index():
             cod_postal=request.form.get('cod_postal'),
             telefon=request.form.get('telefon'),
             email=request.form.get('email'),
+            doi_ani=(request.form.get('doi_ani') == 'on'),
             user_signature_base64=request.form.get('user_signature_base64')
         )
         db.session.add(new_sub)

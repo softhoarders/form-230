@@ -36,7 +36,8 @@ TRANSLATIONS = {
         'turnstile_err': 'Verificarea Turnstile a eșuat. Încercați din nou.',
         'form_success': 'Formularul a fost trimis cu succes!',
         'tax_deductible': 'Donația ta este 100% deductibilă fiscal pentru persoanele din SUA',
-        'gdpr_consent': 'Sunt de acord cu procesarea datelor mele personale în conformitate cu GDPR'
+        'gdpr_consent': 'Sunt de acord cu procesarea datelor mele personale în conformitate cu GDPR',
+        'doi_ani': 'Opțiune privind distribuirea sumei pentru o perioadă de 2 ani (doresc să bifez căsuța)'
     },
     'en': {
         'page_title': 'Support Team Soft Hoarders',
@@ -75,6 +76,7 @@ TRANSLATIONS = {
         'turnstile_err': 'Turnstile verification failed. Please try again.',
         'form_success': 'The form was submitted successfully!',
         'tax_deductible': 'Your donation is 100% tax deductible for people in the US',
-        'gdpr_consent': 'I agree to the processing of my personal data in accordance with GDPR'
+        'gdpr_consent': 'I agree to the processing of my personal data in accordance with GDPR',
+        'doi_ani': 'Option regarding the distribution of the amount for a period of 2 years (I want to check the box)'
     }
 }
