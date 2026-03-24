@@ -30,7 +30,11 @@ TRANSLATIONS = {
         'contact_us': 'Contactează-ne',
         'location_title': 'Locație',
         'email_title': 'Email',
-        'login': 'Logare'
+        'login': 'Logare',
+        'turnstile_err': 'Verificarea Turnstile a eșuat. Încercați din nou.',
+        'form_success': 'Formularul a fost trimis cu succes!',
+        'tax_deductible': 'Donația ta este 100% deductibilă fiscal pentru persoanele din SUA',
+        'gdpr_consent': 'Sunt de acord cu procesarea datelor mele personale în conformitate cu GDPR'
     },
     'en': {
         'page_title': 'Support Team Soft Hoarders',
@@ -63,6 +67,10 @@ TRANSLATIONS = {
         'contact_us': 'Contact Us',
         'location_title': 'Location',
         'email_title': 'Email',
-        'login': 'Login'
+        'login': 'Login',
+        'turnstile_err': 'Turnstile verification failed. Please try again.',
+        'form_success': 'The form was submitted successfully!',
+        'tax_deductible': 'Your donation is 100% tax deductible for people in the US',
+        'gdpr_consent': 'I agree to the processing of my personal data in accordance with GDPR'
     }
 }

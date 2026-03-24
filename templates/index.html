@@ -3,10 +3,10 @@
 {% block content %}
 <div class="donation-banner intro-fade">
     <strong>{{ t.donate_msg }}</strong><br>
-    <p class="tax-deductible-note">Your donation is 100% tax deductible for people in the US</p>
+    <p class="tax-deductible-note">{{ t.tax_deductible }}</p>
     <div class="gdpr-consent">
         <input type="checkbox" id="gdpr-consent" name="gdpr-consent" required>
-        <label for="gdpr-consent">I agree to the processing of my personal data in accordance with GDPR</label>
+        <label for="gdpr-consent">{{ t.gdpr_consent }}</label>
     </div>
     <a href="https://hcb.hackclub.com/donations/start/soft-hoarders" target="_blank" class="btn btn-donate mt-1" id="donate-btn" disabled>{{ t.donate_btn }}</a>
 </div>

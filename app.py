@@ -213,10 +213,12 @@ def set_lang_route(lang_code):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    lang = session.get('lang', 'ro')
+    t = TRANSLATIONS.get(lang, TRANSLATIONS['ro'])
     if request.method == 'POST':
         turnstile_response = request.form.get('cf-turnstile-response')
         if not verify_turnstile(turnstile_response):
-            flash('Verificarea Turnstile a eșuat. Încercați din nou.', 'error')
+            flash(t['turnstile_err'], 'error')
             return redirect(url_for('index'))
             
         new_sub = Submission(
@@ -237,7 +239,7 @@ def index():
         )
         db.session.add(new_sub)
         db.session.commit()
-        flash('Formularul a fost trimis cu succes!', 'success')
+        flash(t['form_success'], 'success')
         return redirect(url_for('index'))
     return render_template('index.html')
 
