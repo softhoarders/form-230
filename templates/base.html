@@ -11,9 +11,10 @@
     <header>
         <div class="logo">{{ t.header_title }}</div>
         <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
-            <div class="pill-lang-switcher">
-                <a href="{{ url_for('set_lang_route', lang_code='ro') }}" class="lang-pill {% if lang == 'ro' %}active{% endif %}">RO</a>
-                <a href="{{ url_for('set_lang_route', lang_code='en') }}" class="lang-pill {% if lang == 'en' %}active{% endif %}">EN</a>
+            <div class="pill-lang-switcher glass-morph">
+                <a href="{{ url_for('set_lang_route', lang_code='en') }}" class="lang-pill {% if lang == 'en' %}active{% endif %}">🇺🇸 EN</a>
+                <div class="lang-divider"></div>
+                <a href="{{ url_for('set_lang_route', lang_code='ro') }}" class="lang-pill {% if lang == 'ro' %}active{% endif %}">🇷🇴 RO</a>
             </div>
             <button id="theme-toggle">{{ t.theme_toggle }}</button>
             <a href="{{ url_for('login') }}" class="btn" style="padding: 5px 10px; font-size: 0.9em; text-decoration: none;">{{ t.login }}</a>
