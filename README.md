@@ -27,8 +27,6 @@ flask run
 ```
 
 4. Go to `http://localhost:5000`. Login details (default test account inside `app.py`):
-- **Username:** `pulert`
-- **Password:** `softhoarderscnfbmuzeu`
 
 ## Architecture 
 - **app.py**: Core logic handling Routes, DB layout using SQLAlchemy, and precise text-coords drawing to map over the existing form layout in ReportLab.

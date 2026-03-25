@@ -126,8 +126,8 @@ def generate_pdf(submission):
 
     def c(key, default_x, default_y):
         # Global offset to move all text right and adjust vertically
-        offset_x = 4
-        offset_y = -1
+        offset_x = 8
+        offset_y = 3
         if key in coords:
             return (coords[key]["x"] + offset_x, coords[key]["y"] + offset_y)
         return (default_x + offset_x, default_y + offset_y)
@@ -197,6 +197,7 @@ def generate_pdf(submission):
 
     # User Signature
     x, y = c("user_signature", 100, 42)
+    y -= 15  # Move user signature a bit downward
     if submission.user_signature_base64:
         try:
             head, b64data = submission.user_signature_base64.split(',', 1)
@@ -204,7 +205,7 @@ def generate_pdf(submission):
             with tempfile.NamedTemporaryFile('w+b', delete=False, suffix='.png') as tmp:
                 tmp.write(sig_data)
                 tmp.flush()
-                can.drawImage(tmp.name, x, y, width=120, height=45, mask='auto')
+                can.drawImage(tmp.name, x, y, width=100, height=35, mask='auto')
                 os.unlink(tmp.name)
         except Exception as e:
             print("Error drawing user signature:", e)
@@ -399,4 +400,4 @@ def download_pdf(sub_id):
     return redirect(url_for('admin'))
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5002)
