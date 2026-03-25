@@ -17,14 +17,28 @@ dotenv.load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = 'super_secret_key_change_in_production'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///form230.db'
+
+DB_DIR = '/opt/form-230-data'
+try:
+    os.makedirs(DB_DIR, exist_ok=True)
+    db_path = os.path.join(DB_DIR, 'form230.db')
+except PermissionError:
+    # Fallback to current directory if there are no permissions (e.g. local testing on macOS without sudo)
+    print(f"Warning: No permission to create {DB_DIR}. Falling back to local database.")
+    db_path = 'form230.db'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}' if db_path == 'form230.db' else f'sqlite:////{db_path.lstrip("/")}'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
 # Ensure folders exist
-GENERATED_DIR = os.path.join(app.root_path, 'generated_forms')
-os.makedirs(GENERATED_DIR, exist_ok=True)
+GENERATED_DIR = os.path.join(DB_DIR if 'DB_DIR' in globals() else app.root_path, 'generated_forms')
+try:
+    os.makedirs(GENERATED_DIR, exist_ok=True)
+except PermissionError:
+    GENERATED_DIR = os.path.join(app.root_path, 'generated_forms')
+    os.makedirs(GENERATED_DIR, exist_ok=True)
 
 # Turnstile config from environment variables
 TURNSTILE_SECRET_KEY = os.environ.get('TURNSTILE_SECRET_KEY', '1x0000000000000000000000000000000AA')
@@ -348,6 +362,12 @@ def admin():
     config = AdminConfig.query.first()
     return render_template('admin.html', submissions=submissions, config=config)
 
+@app.route('/admin/settings', methods=['GET'])
+@admin_required
+def admin_settings():
+    config = AdminConfig.query.first()
+    return render_template('settings.html', config=config)
+
 @app.route('/admin/config', methods=['POST'])
 @admin_required
 def update_config():
@@ -375,7 +395,7 @@ def update_config():
 
     db.session.commit()
     flash('Configurația a fost actualizată.', 'success')
-    return redirect(url_for('admin'))
+    return redirect(url_for('admin_settings'))
 
 @app.route('/admin/approve/<int:sub_id>', methods=['POST'])
 @admin_required

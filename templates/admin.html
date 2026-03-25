@@ -4,100 +4,57 @@
 <div class="intro-fade">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
         <h1>Admin Dashboard</h1>
-        <a href="/logout" class="btn" style="background:var(--border);"><small>Logout</small></a>
+        <div style="display: flex; gap: 10px;">
+            <a href="/logout" class="btn" style="background:var(--border);"><small>Logout</small></a>
+        </div>
     </div>
 
-    <div class="dashboard-grid">
-        <!-- Configuration Card -->
-        <div class="card" style="align-self: start;">
-            <h3>Configurare Date ONG</h3>
-            <p class="text-muted mb-2"><small>Aceste date vor fi adăugate automat pe PDF-ul generat.</small></p>
-            <form action="/admin/config" method="POST" enctype="multipart/form-data">
-                <div class="form-group mb-1">
-                    <label>Nume ONG</label>
-                    <input type="text" name="ong_name" value="{{ config.ong_name }}" required>
+    <!-- Submissions List -->
+    <div class="card" style="width: 100%;">
+        <h3>Toate Formularele ({{ submissions|length }})</h3>
+        <p class="text-muted mb-2"><small>Dă click pe un formular pentru a vedea detaliile sau a-l aproba.</small></p>                                                  
+        {% for sub in submissions %}
+        <div class="submission-item">
+            <div class="submission-header">
+                <div>
+                    <strong>{{ sub.nume }} {{ sub.prenume }}</strong> 
+                    <span class="text-muted"> - CNP: {{ sub.cnp }}</span>
                 </div>
-                <div class="form-group mb-1">
-                    <label>Cod de Identificare (CUI)</label>
-                    <input type="text" name="ong_cui" value="{{ config.ong_cui }}" required>
-                </div>
-                <div class="form-group mb-1">
-                    <label>Cont Bancar (IBAN)</label>
-                    <input type="text" name="ong_iban" value="{{ config.ong_iban }}" required>
-                </div>
-                <div class="form-group mb-1">
-                    <label>Sediul (Adresa)</label>
-                    <input type="text" name="ong_sediu" value="{{ config.ong_sediu }}" required>
-                </div>
-                <div class="form-group mb-1">
-                    <label>Banca</label>
-                    <input type="text" name="ong_cont_bancar" value="{{ config.ong_cont_bancar }}" required>
-                </div>
-                <div class="form-group mb-2">
-                    <label>Semnătură curentă (sau Desenează mai jos pentru a o schimba)</label>
-                    {% if config.signature_base64 %}
-                    <div style="margin-bottom: 10px;">
-                        <img src="{{ config.signature_base64 }}" alt="Signature" style="max-height: 50px; background: white; padding: 5px; border: 1px dashed #ccc;">
-                    </div>
-                    {% endif %}
-                    <div class="signature-container" style="border: 1px solid #ccc; background: #fff; width: 100%; max-width: 400px; height: 150px; border-radius: 8px; position: relative; margin-bottom: 10px;">
-                        <canvas id="admin-signature-pad" style="width: 100%; height: 100%; border-radius: 8px; touch-action: none;"></canvas>
-                    </div>
-                    <button type="button" id="clear-admin-signature" class="btn btn-secondary" style="font-size: 0.8rem; padding: 5px 10px;">Șterge Semnătura</button>
-                    <input type="hidden" name="signature_base64" id="signature_base64">
-                </div>
-                <button type="submit" class="btn btn-primary mt-1" style="background-color: var(--primary);">Salvează</button>
-            </form>
-        </div>
-
-        <!-- Submissions List -->
-        <div class="card">
-            <h3>Toate Formularele ({{ submissions|length }})</h3>
-            <p class="text-muted mb-2"><small>Dă click pe un formular pentru a vedea detaliile sau a-l aproba.</small></p>
-            
-            {% for sub in submissions %}
-            <div class="submission-item">
-                <div class="submission-header">
-                    <div>
-                        <strong>{{ sub.nume }} {{ sub.prenume }}</strong> 
-                        <span class="text-muted"> - CNP: {{ sub.cnp }}</span>
-                    </div>
-                    <div>
-                        <span class="badge badge-{{ sub.status }}">{{ sub.status|upper }}</span>
-                        <small class="text-muted ml-2">{{ sub.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
-                    </div>
-                </div>
-                <div class="submission-body">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; font-size: 0.9rem;">
-                        <div>
-                            <p><strong>Inițiala tatălui: </strong>{{ sub.initiala_tatalui }}</p>
-                            <p><strong>Telefon: </strong>{{ sub.telefon or 'N/A' }}</p>
-                            <p><strong>Email: </strong>{{ sub.email or 'N/A' }}</p>
-                            <p><strong>Județ: </strong>{{ sub.judet }}</p>
-                            <p><strong>Localitate: </strong>{{ sub.localitate }}</p>
-                        </div>
-                        <div>
-                            <p><strong>Adresă: </strong>{{ sub.strada }} nr.{{ sub.numar }}</p>
-                            <p><strong>Bloc/Sc: </strong>bl.{{ sub.bloc }} sc.{{ sub.scara }} ap.{{ sub.apartament }}</p>
-                            <p><strong>Cod Postal: </strong>{{ sub.cod_postal }}</p>
-                        </div>
-                    </div>
-                    
-                    <div style="padding-top: 1rem; border-top: 1px dashed var(--border); display: flex; gap: 10px;">
-                        {% if sub.status == 'pending' %}
-                        <form action="/admin/approve/{{ sub.id }}" method="POST" style="margin: 0;">
-                            <button type="submit" class="btn btn-primary" style="background-color: #28a745;">Aprobă & Generează PDF</button>
-                        </form>
-                        {% else %}
-                            <a href="/admin/download/{{ sub.id }}" class="btn btn-primary">Download PDF</a>
-                        {% endif %}
-                    </div>
+                <div>
+                    <span class="badge badge-{{ sub.status }}">{{ sub.status|upper }}</span>
+                    <small class="text-muted ml-2">{{ sub.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
                 </div>
             </div>
-            {% else %}
-            <p class="text-muted">Nu există înregistrări.</p>
-            {% endfor %}
+            <div class="submission-body">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; font-size: 0.9rem;">
+                    <div>
+                        <p><strong>Inițiala tatălui: </strong>{{ sub.initiala_tatalui }}</p>
+                        <p><strong>Telefon: </strong>{{ sub.telefon or 'N/A' }}</p>
+                        <p><strong>Email: </strong>{{ sub.email or 'N/A' }}</p>
+                        <p><strong>Județ: </strong>{{ sub.judet }}</p>
+                        <p><strong>Localitate: </strong>{{ sub.localitate }}</p>
+                    </div>
+                    <div>
+                        <p><strong>Adresă: </strong>{{ sub.strada }} nr.{{ sub.numar }}</p>
+                        <p><strong>Bloc/Sc: </strong>bl.{{ sub.bloc }} sc.{{ sub.scara }} ap.{{ sub.apartament }}</p>
+                        <p><strong>Cod Postal: </strong>{{ sub.cod_postal }}</p>
+                    </div>
+                </div>
+                
+                <div style="padding-top: 1rem; border-top: 1px dashed var(--border); display: flex; gap: 10px;">
+                    {% if sub.status == 'pending' %}
+                    <form action="/admin/approve/{{ sub.id }}" method="POST" style="margin: 0;">
+                        <button type="submit" class="btn btn-primary" style="background-color: #28a745;">Aprobă & Generează PDF</button>
+                    </form>
+                    {% else %}
+                        <a href="/admin/download/{{ sub.id }}" class="btn btn-primary">Download PDF</a>
+                    {% endif %}
+                </div>
+            </div>
         </div>
+        {% else %}
+        <p class="text-muted">Nu există înregistrări.</p>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

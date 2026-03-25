@@ -11,6 +11,9 @@
     <header>
         <div class="logo">{{ t.header_title }}</div>
         <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
+            {% if session.get('admin') %}
+            <a href="{{ url_for('admin_settings') }}" style="text-decoration: none; font-size: 1.2rem; filter: grayscale(1) brightness(1.2)" title="Settings">⚙️</a>
+            {% endif %}
             <div class="pill-lang-switcher glass-morph">
                 <a href="{{ url_for('set_lang_route', lang_code='en') }}" class="lang-pill {% if lang == 'en' %}active{% endif %}">🇺🇸 EN</a>
                 <div class="lang-divider"></div>
