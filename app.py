@@ -420,4 +420,4 @@ def download_pdf(sub_id):
     return redirect(url_for('admin'))
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5002)
+    app.run(debug=True, port=3000)
